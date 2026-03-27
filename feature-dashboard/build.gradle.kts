@@ -9,8 +9,15 @@ plugins {
 android {
     namespace = "com.autozen.dashboard"
     compileSdk = 34
-    defaultConfig { minSdk = 29 }
-    buildFeatures { compose = true }
+    defaultConfig {
+        minSdk = 29
+        val weatherKey = project.findProperty("WEATHER_API_KEY")?.toString() ?: ""
+        buildConfigField("String", "WEATHER_API_KEY", "\"$weatherKey\"")
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -21,7 +28,9 @@ android {
 dependencies {
     implementation(project(":core-ui"))
     implementation(project(":core-obd"))
+    implementation(project(":core-network"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.lifecycle.viewmodel)
+    implementation(libs.hilt.navigation.compose)
 }

@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.autozen.network.weather.WeatherResponse
+import com.autozen.network.weather.WeatherState
 
 @Composable
 fun WeatherScreen(
@@ -21,15 +23,15 @@ fun WeatherScreen(
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (val s = state) {
-            is WeatherUiState.Loading -> CircularProgressIndicator()
-            is WeatherUiState.Error -> Text(s.message, color = Color.Red, fontSize = 20.sp)
-            is WeatherUiState.Success -> WeatherContent(s.data)
+            is WeatherState.Loading -> CircularProgressIndicator()
+            is WeatherState.Error -> Text(s.message, color = Color.Red, fontSize = 20.sp)
+            is WeatherState.Success -> WeatherContent(s.data)
         }
     }
 }
 
 @Composable
-fun WeatherContent(data: com.autozen.network.weather.WeatherResponse) {
+fun WeatherContent(data: WeatherResponse) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),

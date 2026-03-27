@@ -35,8 +35,10 @@ dependencies {
     implementation(project(":feature-dashboard"))
     implementation(project(":feature-trip"))
     implementation(project(":feature-weather"))
+    implementation(project(":feature-map"))
     implementation(project(":core-ui"))
     implementation(project(":core-data"))
+    implementation(project(":core-network"))
 
     implementation(libs.android.core.ktx)
     implementation(platform(libs.compose.bom))

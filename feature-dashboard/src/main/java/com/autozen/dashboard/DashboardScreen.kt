@@ -2,11 +2,11 @@ package com.autozen.dashboard
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -17,6 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.autozen.dashboard.model.DriveMode
 import com.autozen.dashboard.model.VehicleData
+import com.autozen.network.weather.WeatherState
+import com.autozen.ui.widget.ClockWidget
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,14 +28,30 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val data by viewModel.vehicleData.collectAsState()
+    val weatherState by viewModel.weatherState.collectAsState()
+    val weather = (weatherState as? WeatherState.Success)?.data
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp, vertical = 12.dp)
     ) {
-        // Safety alert banner at top
-        SafetyAlertBanner(vehicleData = data)
+        // Top bar: clock + weather
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ClockWidget()
+            if (weather != null) {
+                WeatherWidget(weather)
+            }
+        }
+
+        Spacer(Modifier.height(6.dp))
+
+        // Safety alert banner
+        SafetyAlertBanner(vehicleData = data, weather = weather)
 
         Spacer(Modifier.height(8.dp))
 
@@ -173,4 +191,50 @@ fun StatusItem(label: String, value: String, color: Color) {
         Text(label, fontSize = 14.sp, color = Color.Gray)
         Text(value, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = color)
     }
+}
+
+@Composable
+fun WeatherWidget(weather: com.autozen.network.weather.WeatherResponse) {
+    Surface(
+        color = Color(0xFF1A1A2E),
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = weatherIcon(weather.weather.firstOrNull()?.description ?: ""),
+                fontSize = 22.sp
+            )
+            Column {
+                Text(
+                    text = "${weather.main.temp.toInt()}°C",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
+                )
+                Text(
+                    text = weather.name,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+            Column {
+                Text("湿度 ${weather.main.humidity}%", fontSize = 11.sp, color = Color.Gray)
+                Text("风速 ${weather.wind.speed}m/s", fontSize = 11.sp, color = Color.Gray)
+            }
+        }
+    }
+}
+
+private fun weatherIcon(desc: String): String = when {
+    desc.contains("rain") || desc.contains("雨") -> "🌧"
+    desc.contains("snow") || desc.contains("雪") -> "❄"
+    desc.contains("cloud") || desc.contains("云") -> "☁"
+    desc.contains("clear") || desc.contains("晴") -> "☀"
+    desc.contains("fog") || desc.contains("雾") -> "🌫"
+    desc.contains("thunder") || desc.contains("雷") -> "⛈"
+    else -> "🌤"
 }

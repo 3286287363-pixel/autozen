@@ -7,17 +7,10 @@ plugins {
 }
 
 android {
-    namespace = "com.autozen.weather"
+    namespace = "com.autozen.map"
     compileSdk = 34
-    defaultConfig {
-        minSdk = 29
-        val weatherKey = project.findProperty("WEATHER_API_KEY")?.toString() ?: ""
-        buildConfigField("String", "WEATHER_API_KEY", "\"$weatherKey\"")
-    }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
+    defaultConfig { minSdk = 29 }
+    buildFeatures { compose = true }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -31,5 +24,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.lifecycle.viewmodel)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
     implementation(libs.hilt.navigation.compose)
 }

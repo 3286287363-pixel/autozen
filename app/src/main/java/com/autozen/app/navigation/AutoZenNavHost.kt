@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.autozen.dashboard.DashboardScreen
 import com.autozen.dashboard.FocusScreen
+import com.autozen.map.MapScreen
 import com.autozen.trip.TripScreen
 import com.autozen.weather.WeatherScreen
 
@@ -23,11 +25,12 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
     object Dashboard : Screen("dashboard", "仪表盘", Icons.Default.DirectionsCar)
     object Trip : Screen("trip", "行程", Icons.Default.History)
     object Weather : Screen("weather", "天气", Icons.Default.WbSunny)
+    object Map : Screen("map", "地图", Icons.Default.Map)
 }
 
 const val FOCUS_ROUTE = "focus"
 
-val bottomNavScreens = listOf(Screen.Dashboard, Screen.Trip, Screen.Weather)
+val bottomNavScreens = listOf(Screen.Dashboard, Screen.Trip, Screen.Weather, Screen.Map)
 
 @Composable
 fun AutoZenNavHost() {
@@ -68,6 +71,7 @@ fun AutoZenNavHost() {
             composable(Screen.Dashboard.route) { DashboardScreen(navController) }
             composable(Screen.Trip.route) { TripScreen(navController) }
             composable(Screen.Weather.route) { WeatherScreen(navController) }
+            composable(Screen.Map.route) { MapScreen(navController) }
             composable(FOCUS_ROUTE) { FocusScreen(navController) }
         }
     }
