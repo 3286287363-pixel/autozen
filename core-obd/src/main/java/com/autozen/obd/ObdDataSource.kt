@@ -1,6 +1,6 @@
 package com.autozen.obd
 
-import com.autozen.dashboard.model.VehicleData
+import com.autozen.obd.model.VehicleData
 import kotlinx.coroutines.flow.Flow
 
 interface ObdDataSource {

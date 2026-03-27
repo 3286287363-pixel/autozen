@@ -1,16 +1,5 @@
 package com.autozen.dashboard.model
 
-data class VehicleData(
-    val speedKmh: Float = 0f,
-    val rpm: Float = 0f,
-    val fuelPercent: Float = 80f,
-    val coolantTempC: Float = 90f,
-    val driveMode: DriveMode = DriveMode.COMFORT,
-    val isEngineOn: Boolean = false
-)
-
-enum class DriveMode(val label: String) {
-    SPORT("运动"),
-    COMFORT("舒适"),
-    ECO("节能")
-}
+// VehicleData and DriveMode now live in core-obd for clean dependency graph
+typealias VehicleData = com.autozen.obd.model.VehicleData
+typealias DriveMode = com.autozen.obd.model.DriveMode

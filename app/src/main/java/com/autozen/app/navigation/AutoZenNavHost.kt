@@ -1,5 +1,7 @@
 package com.autozen.app.navigation
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsCar
@@ -22,6 +24,7 @@ import com.autozen.dashboard.FocusScreen
 import com.autozen.dashboard.HealthScreen
 import com.autozen.map.MapScreen
 import com.autozen.settings.SettingsScreen
+import com.autozen.trip.TripDetailScreen
 import com.autozen.trip.TripScreen
 import com.autozen.trip.TripStatsScreen
 import com.autozen.weather.WeatherScreen
@@ -38,7 +41,7 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 const val FOCUS_ROUTE = "focus"
 const val STATS_ROUTE = "stats"
 
-val bottomNavScreens = listOf(
+val railScreens = listOf(
     Screen.Dashboard, Screen.Trip, Screen.Weather,
     Screen.Map, Screen.Health, Screen.Settings
 )
@@ -48,45 +51,51 @@ fun AutoZenNavHost() {
     val navController = rememberNavController()
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
-    val showBottomBar = currentRoute != FOCUS_ROUTE
+    val showRail = currentRoute != FOCUS_ROUTE
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                NavigationBar {
-                    bottomNavScreens.forEach { screen ->
-                        NavigationBarItem(
-                            selected = currentRoute == screen.route,
-                            onClick = {
-                                if (currentRoute != screen.route) {
-                                    navController.navigate(screen.route) {
-                                        popUpTo(Screen.Dashboard.route) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+    Row(modifier = Modifier.fillMaxSize()) {
+        // Left NavigationRail — matches AAOS landscape layout convention
+        if (showRail) {
+            NavigationRail {
+                railScreens.forEach { screen ->
+                    NavigationRailItem(
+                        selected = currentRoute == screen.route,
+                        onClick = {
+                            if (currentRoute != screen.route) {
+                                navController.navigate(screen.route) {
+                                    popUpTo(Screen.Dashboard.route) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                            },
-                            icon = { Icon(screen.icon, contentDescription = screen.label) },
-                            label = { Text(screen.label) }
-                        )
-                    }
+                            }
+                        },
+                        icon = { Icon(screen.icon, contentDescription = screen.label) },
+                        label = { Text(screen.label) }
+                    )
                 }
             }
         }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Dashboard.route,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(Screen.Dashboard.route) { DashboardScreen(navController) }
-            composable(Screen.Trip.route)      { TripScreen(navController) }
-            composable(Screen.Weather.route)   { WeatherScreen(navController) }
-            composable(Screen.Map.route)       { MapScreen(navController) }
-            composable(Screen.Health.route)    { HealthScreen(navController) }
-            composable(Screen.Settings.route)  { SettingsScreen(navController) }
-            composable(FOCUS_ROUTE)            { FocusScreen(navController) }
-            composable(STATS_ROUTE)            { TripStatsScreen(navController) }
+
+        // Main content area
+        Scaffold { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Dashboard.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(Screen.Dashboard.route) { DashboardScreen(navController) }
+                composable(Screen.Trip.route)      { TripScreen(navController) }
+                composable(Screen.Weather.route)   { WeatherScreen(navController) }
+                composable(Screen.Map.route)       { MapScreen(navController) }
+                composable(Screen.Health.route)    { HealthScreen(navController) }
+                composable(Screen.Settings.route)  { SettingsScreen(navController) }
+                composable(FOCUS_ROUTE)            { FocusScreen(navController) }
+                composable(STATS_ROUTE)            { TripStatsScreen(navController) }
+                composable("trip_detail/{tripId}") { back ->
+                    val tripId = back.arguments?.getString("tripId")?.toLongOrNull() ?: 0L
+                    TripDetailScreen(tripId = tripId, navController = navController)
+                }
+            }
         }
     }
 }

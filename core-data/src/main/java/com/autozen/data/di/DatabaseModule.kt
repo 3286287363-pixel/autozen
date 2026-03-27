@@ -18,7 +18,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "autozen.db").build()
+        Room.databaseBuilder(context, AppDatabase::class.java, "autozen.db")
+            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .build()
 
     @Provides
     fun provideTripDao(db: AppDatabase): TripDao = db.tripDao()

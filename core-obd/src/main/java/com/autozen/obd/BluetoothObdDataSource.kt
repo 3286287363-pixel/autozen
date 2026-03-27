@@ -3,7 +3,7 @@ package com.autozen.obd
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothSocket
-import com.autozen.dashboard.model.VehicleData
+import com.autozen.obd.model.VehicleData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

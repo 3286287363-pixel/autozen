@@ -78,7 +78,11 @@ fun TripScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(trips) { trip ->
-                    TripCard(trip = trip, onDelete = { viewModel.deleteTrip(trip) })
+                    TripCard(
+                        trip = trip,
+                        onDelete = { viewModel.deleteTrip(trip) },
+                        onClick = { navController.navigate("trip_detail/${trip.id}") }
+                    )
                 }
             }
         }
@@ -86,9 +90,9 @@ fun TripScreen(
 }
 
 @Composable
-fun TripCard(trip: TripEntity, onDelete: () -> Unit) {
+fun TripCard(trip: TripEntity, onDelete: () -> Unit, onClick: () -> Unit = {}) {
     val fmt = SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
         Row(
             modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,

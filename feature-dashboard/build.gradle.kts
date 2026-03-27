@@ -33,4 +33,8 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.hilt.navigation.compose)
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }
