@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,8 +29,29 @@ fun TripScreen(
     viewModel: TripViewModel = hiltViewModel()
 ) {
     val trips by viewModel.trips.collectAsState()
+    val isRecording by viewModel.isRecording.collectAsState()
 
     Scaffold(
+        topBar = {
+            if (isRecording) {
+                Surface(color = Color(0xFF1B2A1B)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            Icons.Default.FiberManualRecord,
+                            contentDescription = null,
+                            tint = Color(0xFF4CAF50),
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text("行程记录中…", fontSize = 14.sp, color = Color(0xFF4CAF50))
+                    }
+                }
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::addSampleTrip) {
                 Icon(Icons.Default.Add, contentDescription = "添加行程")

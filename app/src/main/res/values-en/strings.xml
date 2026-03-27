@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AutoZen</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_trip">Trips</string>
+    <string name="nav_weather">Weather</string>
+    <string name="nav_focus">Focus</string>
+    <string name="dashboard_rpm">RPM</string>
+    <string name="dashboard_speed">Speed</string>
+    <string name="dashboard_fuel">Fuel</string>
+    <string name="dashboard_coolant">Coolant</string>
+    <string name="dashboard_drive_mode">Drive Mode</string>
+    <string name="mode_sport">Sport</string>
+    <string name="mode_comfort">Comfort</string>
+    <string name="mode_eco">Eco</string>
+    <string name="trip_empty">No trips recorded</string>
+    <string name="trip_add">Add Trip</string>
+    <string name="trip_delete">Delete</string>
+    <string name="trip_avg_speed">Avg Speed</string>
+    <string name="trip_fuel">Fuel Cons.</string>
+    <string name="trip_auto_recording">Recording trip…</string>
+    <string name="trip_auto_saved">Trip saved</string>
+    <string name="weather_loading">Loading</string>
+    <string name="weather_feels_like">Feels Like</string>
+    <string name="weather_humidity">Humidity</string>
+    <string name="weather_wind">Wind</string>
+    <string name="focus_mode_title">Focus Mode</string>
+    <string name="focus_mode_subtitle">Stay focused on the road</string>
+    <string name="focus_exit">Exit Focus</string>
+    <string name="safety_rain_warning">Wet road, slow down</string>
+    <string name="safety_heat_warning">Engine overheating, check coolant</string>
+    <string name="safety_fuel_warning">Low fuel, refuel soon</string>
+    <string name="safety_speed_warning">Overspeed, drive safely</string>
+</resources>

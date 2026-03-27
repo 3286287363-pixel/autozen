@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.autozen.dashboard.DashboardScreen
+import com.autozen.dashboard.FocusScreen
 import com.autozen.trip.TripScreen
 import com.autozen.weather.WeatherScreen
 
@@ -24,6 +25,8 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
     object Weather : Screen("weather", "天气", Icons.Default.WbSunny)
 }
 
+const val FOCUS_ROUTE = "focus"
+
 val bottomNavScreens = listOf(Screen.Dashboard, Screen.Trip, Screen.Weather)
 
 @Composable
@@ -31,25 +34,28 @@ fun AutoZenNavHost() {
     val navController = rememberNavController()
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
+    val showBottomBar = currentRoute != FOCUS_ROUTE
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                bottomNavScreens.forEach { screen ->
-                    NavigationBarItem(
-                        selected = currentRoute == screen.route,
-                        onClick = {
-                            if (currentRoute != screen.route) {
-                                navController.navigate(screen.route) {
-                                    popUpTo(Screen.Dashboard.route) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
+            if (showBottomBar) {
+                NavigationBar {
+                    bottomNavScreens.forEach { screen ->
+                        NavigationBarItem(
+                            selected = currentRoute == screen.route,
+                            onClick = {
+                                if (currentRoute != screen.route) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(Screen.Dashboard.route) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
-                            }
-                        },
-                        icon = { Icon(screen.icon, contentDescription = screen.label) },
-                        label = { Text(screen.label) }
-                    )
+                            },
+                            icon = { Icon(screen.icon, contentDescription = screen.label) },
+                            label = { Text(screen.label) }
+                        )
+                    }
                 }
             }
         }
@@ -62,6 +68,7 @@ fun AutoZenNavHost() {
             composable(Screen.Dashboard.route) { DashboardScreen(navController) }
             composable(Screen.Trip.route) { TripScreen(navController) }
             composable(Screen.Weather.route) { WeatherScreen(navController) }
+            composable(FOCUS_ROUTE) { FocusScreen(navController) }
         }
     }
 }

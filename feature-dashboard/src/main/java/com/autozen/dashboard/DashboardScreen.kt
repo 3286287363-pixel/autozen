@@ -27,33 +27,49 @@ fun DashboardScreen(
 ) {
     val data by viewModel.vehicleData.collectAsState()
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 24.dp, vertical = 12.dp)
     ) {
-        // RPM gauge (left)
-        GaugeWidget(
-            label = "转速",
-            value = data.rpm,
-            maxValue = 8000f,
-            unit = "RPM",
-            accentColor = Color(0xFFFF6D00)
-        )
+        // Safety alert banner at top
+        SafetyAlertBanner(vehicleData = data)
 
-        // Center info panel
-        CenterPanel(data = data, onModeChange = viewModel::setDriveMode)
+        Spacer(Modifier.height(8.dp))
 
-        // Speed gauge (right)
-        GaugeWidget(
-            label = "车速",
-            value = data.speedKmh,
-            maxValue = 240f,
-            unit = "km/h",
-            accentColor = Color(0xFF00E5FF)
-        )
+        // Gauges row
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // RPM gauge (left)
+            GaugeWidget(
+                label = "转速",
+                value = data.rpm,
+                maxValue = 8000f,
+                unit = "RPM",
+                accentColor = Color(0xFFFF6D00)
+            )
+
+            // Center info panel
+            CenterPanel(
+                data = data,
+                onModeChange = viewModel::setDriveMode,
+                onFocusClick = { navController.navigate("focus") }
+            )
+
+            // Speed gauge (right)
+            GaugeWidget(
+                label = "车速",
+                value = data.speedKmh,
+                maxValue = 240f,
+                unit = "km/h",
+                accentColor = Color(0xFF00E5FF)
+            )
+        }
     }
 }
 
@@ -110,15 +126,23 @@ fun ArcGauge(value: Float, maxValue: Float, accentColor: Color) {
 }
 
 @Composable
-fun CenterPanel(data: VehicleData, onModeChange: (DriveMode) -> Unit) {
+fun CenterPanel(data: VehicleData, onModeChange: (DriveMode) -> Unit, onFocusClick: () -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Fuel & Temperature
         Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-            StatusItem(label = "油量", value = "${data.fuelPercent.toInt()}%", color = Color(0xFF4CAF50))
-            StatusItem(label = "水温", value = "${data.coolantTempC.toInt()}°C", color = Color(0xFFFF9800))
+            StatusItem(
+                label = "油量",
+                value = "${data.fuelPercent.toInt()}%",
+                color = if (data.fuelPercent < 15f) Color(0xFFFF5252) else Color(0xFF4CAF50)
+            )
+            StatusItem(
+                label = "水温",
+                value = "${data.coolantTempC.toInt()}°C",
+                color = if (data.coolantTempC > 105f) Color(0xFFFF5252) else Color(0xFFFF9800)
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         // Drive mode selector
@@ -131,6 +155,14 @@ fun CenterPanel(data: VehicleData, onModeChange: (DriveMode) -> Unit) {
                     label = { Text(mode.label, fontSize = 14.sp) }
                 )
             }
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        // Focus mode entry
+        OutlinedButton(
+            onClick = onFocusClick,
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF00E5FF))
+        ) {
+            Text("专注驾驶", fontSize = 14.sp)
         }
     }
 }
