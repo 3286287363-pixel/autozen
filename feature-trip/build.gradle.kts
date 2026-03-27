@@ -24,4 +24,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.lifecycle.viewmodel)
+    implementation(project(":core-obd"))
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }
