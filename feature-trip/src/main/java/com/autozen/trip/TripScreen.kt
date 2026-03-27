@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material3.*
@@ -32,6 +33,19 @@ fun TripScreen(
     val isRecording by viewModel.isRecording.collectAsState()
 
     Scaffold(
+        floatingActionButton = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                FloatingActionButton(
+                    onClick = { navController.navigate("stats") },
+                    containerColor = androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Icon(Icons.Default.BarChart, contentDescription = "统计")
+                }
+                FloatingActionButton(onClick = viewModel::addSampleTrip) {
+                    Icon(Icons.Default.Add, contentDescription = "添加行程")
+                }
+            }
+        },
         topBar = {
             if (isRecording) {
                 Surface(color = Color(0xFF1B2A1B)) {
@@ -50,11 +64,6 @@ fun TripScreen(
                         Text("行程记录中…", fontSize = 14.sp, color = Color(0xFF4CAF50))
                     }
                 }
-            }
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::addSampleTrip) {
-                Icon(Icons.Default.Add, contentDescription = "添加行程")
             }
         }
     ) { padding ->

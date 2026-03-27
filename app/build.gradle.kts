@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":feature-trip"))
     implementation(project(":feature-weather"))
     implementation(project(":feature-map"))
+    implementation(project(":feature-settings"))
     implementation(project(":core-ui"))
     implementation(project(":core-data"))
     implementation(project(":core-network"))

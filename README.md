@@ -75,13 +75,15 @@ cd autozen
 ```
 autozen/
 ├── app/                    # 主应用入口 + 导航
-├── feature-dashboard/      # 仪表盘（Canvas 动效）
-├── feature-trip/           # 行程记录（Room）
+├── feature-dashboard/      # 仪表盘 + 专注模式 + 车辆健康诊断
+├── feature-trip/           # 行程记录 + 行程统计图表
 ├── feature-weather/        # 天气（Retrofit）
-├── core-data/              # Room Database + DI
-├── core-network/           # Retrofit 网络层
-├── core-obd/               # OBD 数据源（模拟/真实）
-└── core-ui/                # 公共 Compose 组件 + 主题
+├── feature-map/            # Google Maps 地图
+├── feature-settings/       # 设置页（OBD配置/单位/API Key）
+├── core-data/              # Room Database + DI + 蓝牙模块
+├── core-network/           # Retrofit 网络层 + WeatherRepository
+├── core-obd/               # OBD 数据源（模拟/真实蓝牙 ELM327）
+└── core-ui/                # 公共 Compose 组件 + 主题 + ClockWidget
 ```
 
 ---
@@ -93,12 +95,17 @@ autozen/
 - [x] 模拟 OBD 数据源
 - [x] 行程记录（Room）
 - [x] 车载天气（Retrofit）
-- [ ] 真实 OBD-II 蓝牙接入
+- [x] 真实 OBD-II 蓝牙接入（ELM327 SPP）
 - [x] 驾驶专注模式
 - [x] GitHub Actions CI
 - [x] 多语言支持
 - [x] 自动行程记录（引擎启动/停车触发）
 - [x] 驾驶安全建议（车辆状态 + 天气联动）
+- [x] 车辆健康诊断（DTC故障码 + 评分）
+- [x] 行程统计图表（里程/均速折线图）
+- [x] 设置页（OBD配置/单位/API Key）
+- [x] 地图模块（Google Maps 暗色主题）
+- [x] 实时时钟 + 天气 Widget
 
 ---
 
